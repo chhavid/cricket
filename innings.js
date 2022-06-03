@@ -1,7 +1,9 @@
 class Innings {
+  #wicketLimit;
+  #remainingBalls;
   constructor(remainingBalls, wicketLimit) {
-    this.remainingBalls = remainingBalls;
-    this.wicketLimit = wicketLimit;
+    this.#remainingBalls = remainingBalls;
+    this.#wicketLimit = wicketLimit;
     this.runs = 0;
     this.wickets = 0;
     this.balls = 0;
@@ -49,8 +51,8 @@ class Innings {
   }
 
   isGameOver() {
-    return this.wickets === this.wicketLimit ||
-      this.remainingBalls === this.balls;
+    return this.#wicketLimit === this.wickets ||
+      this.#remainingBalls === this.balls;
   }
 }
 
