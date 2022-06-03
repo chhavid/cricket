@@ -1,13 +1,13 @@
-const { EventNotifier } = require('./eventNotifier.js');
+const { EventEmitter } = require('events');
 const { Innings } = require('./innings.js');
 
-const startMatch = (eventNotifier, innings) => {
-  const events = eventNotifier.getEvents();
+const startMatch = (eventEmitter, innings) => {
+  const events = eventEmitter.eventNames();
 
   const intervalId = setInterval(() => {
     const index = Math.floor(Math.random() * events.length);
     const event = events[index];
-    eventNotifier.notify(event, innings);
+    eventEmitter.emit(event, innings);
     innings.display(event);
     if (innings.isGameOver()) {
       console.log('Innings over!!');
@@ -18,15 +18,15 @@ const startMatch = (eventNotifier, innings) => {
 
 const playInnings = () => {
   const innings = new Innings(30, 5);
-  const eventNotifier = new EventNotifier();
-  eventNotifier.register('dot-ball', () => innings.dot());
-  eventNotifier.register('one-run', () => innings.single());
-  eventNotifier.register('two-runs', () => innings.double());
-  eventNotifier.register('four', () => innings.boundary());
-  eventNotifier.register('six', () => innings.overBoundary());
-  eventNotifier.register('out', () => innings.wicket());
+  const eventEmitter = new EventEmitter();
+  eventEmitter.on('dot-ball', () => innings.dot());
+  eventEmitter.on('one-run', () => innings.single());
+  eventEmitter.on('two-runs', () => innings.double());
+  eventEmitter.on('four', () => innings.boundary());
+  eventEmitter.on('six', () => innings.overBoundary());
+  eventEmitter.on('out', () => innings.wicket());
 
-  startMatch(eventNotifier, innings);
+  startMatch(eventEmitter, innings);
 };
 
 playInnings();
